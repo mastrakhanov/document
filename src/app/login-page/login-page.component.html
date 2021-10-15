@@ -1,47 +1,41 @@
-<div id="login-main__wrapper">
-  <form class="login-main__form" [formGroup]="form" (ngSubmit)="submit()">
-    <h2 class="login-main__header">Вход в систему</h2>
-    <div class="alert" *ngIf="notAuth">
-      {{ authInfo.message }}
-    </div>
-    <div class="login-main__control"
-         [ngClass]="{invalid: form.get('name').touched && form.get('name').invalid}"
+<form class="login p-3 my-3 mx-auto" [formGroup]="form" (ngSubmit)="submit()">
+  <h4>Вход в систему</h4>
+  <div class="alert py-2" *ngIf="authMessage.message">
+    {{ authMessage.message }}
+  </div>
+  <div class="my-3 mx-auto"
+       [ngClass]="{ invalid: form.get('name')?.touched && form.get('name')?.invalid }"
+  >
+    <label for="login">Логин:</label>
+    <input class="form-control" id="login" type="text" formControlName="name">
+    <div *ngIf="form.get('name')?.touched && form.get('name')?.invalid"
+         class="validation"
     >
-      <label for="login">Логин:</label>
-      <input id="login" type="text" formControlName="name">
-      <div *ngIf="form.get('name').touched && form.get('name').invalid"
-           class="validation"
-      >
-        <small *ngIf="form.get('name').errors.required">
-          Введите логин
-        </small>
-      </div>
+      <small *ngIf="form.get('name')?.errors?.required">
+        Введите логин
+      </small>
     </div>
-    <div class="login-main__control"
-         [ngClass]="{invalid: form.get('password').touched && form.get('password').invalid}"
+  </div>
+  <div class="my-3 mx-auto"
+       [ngClass]="{ invalid: form.get('password')?.touched && form.get('password')?.invalid }"
+  >
+    <label for="password">Пароль:</label>
+    <input class="form-control" id="password" type="password" formControlName="password">
+    <div
+      class="validation"
+      *ngIf="form.get('password')?.touched && form.get('password')?.invalid"
     >
-      <label for="password">Пароль:</label>
-      <input id="password" type="password" formControlName="password">
-      <div
-        class="validation"
-        *ngIf="form.get('password').touched && form.get('password').invalid"
-      >
-        <small *ngIf="form.get('password').errors.minlength">
-          Пароль должен содержать более {{form.get('password').errors.minlength.requiredLength}} символов
-        </small>
-        <small *ngIf="form.get('password').errors.required">
-          Введите пароль
-        </small>
-      </div>
+      <small *ngIf="form.get('password')?.errors?.minlength">
+        Пароль должен содержать более {{form.get('password')?.errors?.minlength.requiredLength}} символов
+      </small>
+      <small *ngIf="form.get('password')?.errors?.required">
+        Введите пароль
+      </small>
     </div>
-    <div class="buttons">
-      <div>
-        <button
-          type="submit"
-          class="btn btn-primary"
-          [disabled]="form.invalid"
-        >Войти</button>
-      </div>
-    </div>
-  </form>
-</div>
+  </div>
+  <button
+    type="submit"
+    class="btn btn-primary"
+    [disabled]="form.invalid"
+  >Войти</button>
+</form>

@@ -1,78 +1,85 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
-import {IAppResult, IDocument} from '../interface';
-import {DocumentService} from '../document.service';
-import {AuthService} from "../auth.service";
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+
+import { ApproveOptions, IApprove, IDocument, IParam } from '../interface';
+import { DocumentService } from '../services/document.service';
+import { AuthService } from '../services/auth.service';
+import { StorageService } from '../services/storage.service';
+
 
 @Component({
   selector: 'app-document',
   templateUrl: './document.component.html',
-  styleUrls: ['./document.component.scss']
+  styleUrls: ['./document.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DocumentComponent implements OnInit {
 
-  documentInfo: IDocument | any = {};
-  isApproved = false;
+  documentForm = new FormGroup({
+    resolution: new FormControl('', Validators.required),
+    comment: new FormControl('')
+  });
+
+  documentInfo: IDocument = {} as IDocument;
+  approveResult: IApprove = {} as IApprove;
   isVisible = true;
-  isDisabledApprove = false;
-  isDisabledReject = false;
-  approveResult: IAppResult;
-  documentForm: FormGroup;
-  id: number;
+  isApprove = false;
+  isReject = false;
 
-  constructor(private router: Router,
-              private documentService: DocumentService,
-              private auth: AuthService) { }
+  constructor(
+    private readonly authService: AuthService,
+    private readonly documentService: DocumentService,
+    private readonly storageService: StorageService,
+    private readonly router: Router
+  ) { }
 
-  @ViewChild('resValue') resValue: ElementRef;
-  isVisibleResult = false;
 
   ngOnInit(): void {
-    this.documentForm = new FormGroup({
-      resolution: new FormControl('', Validators.required),
-      comment: new FormControl('')
-    });
-
     try {
-      if (JSON.parse(localStorage.getItem('user')) === 'ivanov') {
-        this.id = 1
-      }
-      this.documentInfo = this.documentService.getDocumentData(this.id);
-    } catch (e) {
-      console.log(e);
+      this.documentInfo = this.documentService.getDocument(1);
+    } catch (error) {
+      console.error(error);
     }
   }
 
-  approve() {
+  approve(): void {
     try {
-      const approveParams = {
-        "approver": JSON.parse(localStorage.getItem('user')),
-        "resolution": this.documentForm.value.resolution,
-        "comment": this.documentForm.value.comment,
-        "state": this.isApproved ? 1 : 0
+      const approveParams: IParam = {
+        resolution: this.documentForm.value.resolution,
+        comment: this.documentForm.value.comment,
+        state: this.isApprove ? ApproveOptions.Approved : ApproveOptions.Rejected
       };
-      this.approveResult = this.documentService.getApproveResult(approveParams);
+
+      this.approveResult = {
+        status: this.documentService.getApproveResult(approveParams).status,
+        message: this.documentService.getApproveResult(approveParams).message,
+        resolution: this.documentForm.value.resolution,
+        comment: this.documentForm.value.comment
+      };
+
       if (this.approveResult.status === 200) {
         this.isVisible = false;
-        this.isVisibleResult = true;
       }
-    } catch (e) {
-      console.log(e);
+    } catch (error) {
+      console.error(error);
     }
   }
 
-  resDetection() {
-    this.isDisabledApprove = this.resValue.nativeElement.value === 'Не согласен';
-    this.isDisabledReject = this.resValue.nativeElement.value === 'Согласен' || this.resValue.nativeElement.value === 'Полностью согласен' || this.resValue.nativeElement.value === 'Разрешаю красить в синий цвет';
+  resDetection(): void {
+    this.isReject = this.documentForm.value.resolution === 'Не согласен';
+    this.isApprove = this.documentForm.value.resolution === 'Согласен'
+      || this.documentForm.value.resolution === 'Полностью согласен'
+      || this.documentForm.value.resolution === 'Разрешаю красить в синий цвет';
   }
 
-  exit() {
+  exit(): void {
     try {
-      this.auth.logout();
-      this.router.navigate(['/']);
-    } catch (e) {
-      console.log(e);
+      this.authService.logout();
+      this.router.navigateByUrl('/');
+    } catch (error) {
+      console.error(error);
     }
   }
+
 }

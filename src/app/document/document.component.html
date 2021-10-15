@@ -1,45 +1,49 @@
-<div id="document-wrapper">
-  <div class="card">
-    <div class="approve" *ngIf="isVisibleResult">
-      {{ approveResult.message }}
+<div class="my-3">
+  <div class="card p-3 mx-auto">
+    <div class="d-flex flex-column p-2" *ngIf="!isVisible">
+      <h5 class="text-center">{{ approveResult.message }}</h5>
+      <span class="ms-2">Резолюция: {{ approveResult.resolution }}</span>
+      <span class="ms-2">Комментарий: {{ approveResult.comment || '-' }}</span>
     </div>
     <div class="card-body"
          *ngIf="isVisible"
     >
-      <h5 class="card-title">{{ documentInfo.title }}</h5>
-      <p class="card-text">{{ documentInfo.text1 }}</p>
-      <p class="card-text">{{ documentInfo.text2 }}</p>
-      <div id="form-edit__wrapper">
-        <h5 class="card-title">Утверждение документа</h5>
+      <h5>{{ documentInfo.title }}</h5>
+      <p>{{ documentInfo.text1 }}</p>
+      <p>{{ documentInfo.text2 }}</p>
+      <div class="form-edit-wrapper p-3">
+        <h5>Утверждение документа</h5>
         <form [formGroup]="documentForm" (ngSubmit)="approve()">
-          <div class="form-group"
-               [ngClass]="{invalid: documentForm.get('resolution').touched && documentForm.get('resolution').invalid}"
+          <div class="d-flex flex-column"
+               [ngClass]="{ invalid: documentForm.get('resolution')?.touched && documentForm.get('resolution')?.invalid }"
           >
-            <label for="exampleFormControlSelect">Резолюция<span style="color: red">*</span></label>
-            <select #resValue (click)="resDetection()" id="exampleFormControlSelect" formControlName="resolution">
+            <label for="exampleFormControlSelect">
+              Резолюция
+              <span class="form-color">*</span>
+            </label>
+            <select class="form-control-sm form-select-sm" (click)="resDetection()" id="exampleFormControlSelect" formControlName="resolution">
               <option>Полностью согласен</option>
               <option>Согласен</option>
               <option>Не согласен</option>
               <option>Разрешаю красить в синий цвет</option>
             </select>
           </div>
-          <div class="form-group"
-               [ngClass]="{invalid: documentForm.get('comment').touched && documentForm.get('comment').invalid}"
+          <div class="d-flex flex-column"
+               [ngClass]="{ invalid: documentForm.get('comment')?.touched && documentForm.get('comment')?.invalid }"
           >
             <label for="exampleFormControlText">Комментарий</label>
-            <textarea id="exampleFormControlText" cols="30" rows="5" formControlName="comment"></textarea>
+            <textarea class="form-control-sm" id="exampleFormControlText" cols="30" rows="5" formControlName="comment"></textarea>
           </div>
-          <div class="form-buttons">
+          <div class="d-flex flex-wrap justify-content-around mt-3">
             <button class="btn btn-primary"
                     type="submit"
-                    [disabled] = "documentForm.invalid || isDisabledApprove"
-                    (click)="isApproved = true"
+                    [disabled]="documentForm.invalid || isReject"
             >
               Утвердить
             </button>
             <button class="btn btn-primary"
                     type="submit"
-                    [disabled] = "documentForm.invalid || isDisabledReject"
+                    [disabled]="documentForm.invalid || isApprove"
             >
               Отклонить
             </button>
@@ -48,8 +52,9 @@
       </div>
     </div>
   </div>
-  <div class="btn-exit">
+  <div class="d-flex justify-content-center mt-3">
     <button class="btn btn-primary"
+            type="button"
             (click)="exit()"
     >
       Выйти

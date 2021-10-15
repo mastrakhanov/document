@@ -1,35 +1,43 @@
-import { TestBed, async } from '@angular/core/testing';
+import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+
+import { LoginPageComponent } from './login-page/login-page.component';
+import { DocumentComponent } from './document/document.component';
+
 import { AppComponent } from './app.component';
 
+
 describe('AppComponent', () => {
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  let fixture: ComponentFixture<AppComponent>;
+  let component: AppComponent;
+  let element: HTMLElement;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [AppComponent],
       imports: [
-        RouterTestingModule
-      ],
-      declarations: [
-        AppComponent
-      ],
+        RouterTestingModule.withRoutes([
+          {
+            path: '', component: AppComponent, children: [
+              { path: 'login', component: LoginPageComponent },
+              { path: 'document', component: DocumentComponent }
+            ]
+          }
+        ])
+      ]
     }).compileComponents();
-  }));
+
+    fixture = TestBed.createComponent(AppComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
   it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
+    expect(component).toBeTruthy();
   });
 
-  it(`should have as title 'document'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('document');
-  });
-
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('document app is running!');
+  it('should contain router-outlet', () => {
+    element = fixture.nativeElement;
+    expect(element.innerHTML).toContain('router-outlet');
   });
 });

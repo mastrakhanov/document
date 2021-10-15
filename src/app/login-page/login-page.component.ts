@@ -1,33 +1,40 @@
-import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
-import {IAppResult, IUser} from "../interface";
-import {AuthService} from "../auth.service";
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+
+import { IUser } from '../interface';
+import { AuthService } from '../services/auth.service';
+
+
+type Message = { message: string };
 
 @Component({
   selector: 'app-login-page',
   templateUrl: './login-page.component.html',
-  styleUrls: ['./login-page.component.scss']
+  styleUrls: ['./login-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginPageComponent implements OnInit {
 
-  form: FormGroup;
-  authInfo: IAppResult;
-  notAuth = false;
+  form = new FormGroup({
+    name: new FormControl('', [Validators.required]),
+    password: new FormControl('', [Validators.required, Validators.minLength(6)])
+  });
+
+  authMessage: Message = {} as Message;
 
   constructor(
-    private auth: AuthService,
-    private router: Router,
-  ) {}
+    private readonly authService: AuthService,
+    private readonly router: Router
+  ) { }
 
-  ngOnInit() {
-    this.form = new FormGroup({
-      name: new FormControl('', [Validators.required]),
-      password: new FormControl('', [Validators.required, Validators.minLength(6)])
-    });
-}
+  ngOnInit(): void {
+    if (this.authService.isAuthenticated) {
+      this.router.navigateByUrl('/document');
+    }
+  }
 
-  submit() {
+  submit(): FormGroup | void {
     try {
       if (this.form.invalid) {
         return this.form;
@@ -38,19 +45,18 @@ export class LoginPageComponent implements OnInit {
         password: this.form.value.password
       };
 
-      this.auth.login(user);
+      this.authService.login(user);
 
-      if (this.auth.isAuthenticated) {
-        localStorage.setItem('user', JSON.stringify(user.name));
+      if (this.authService.isAuthenticated) {
         this.form.reset();
-        this.router.navigate(['/document']);
+        this.router.navigateByUrl('/document');
       }
-    } catch (e) {
-      this.notAuth = true;
-      this.authInfo = {
+    } catch (error) {
+      this.authMessage = {
         message: 'Неправильный логин или пароль'
       };
-      console.log(e);
+
+      console.error(error);
     }
   }
 

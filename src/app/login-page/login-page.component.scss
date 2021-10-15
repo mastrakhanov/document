@@ -1,43 +1,24 @@
-#login-main__wrapper {
+@import "src/styles/params";
+
+
+.login {
+  max-width: $login-width;
+  border: 1px dotted #ccc;
+
+  & .alert {
+    color: white;
+    background-color: red;
+    font-size: 15px;
+  }
+
+  .invalid {
+    input {
+      border-color: red;
+    }
+  }
 
   & .validation {
     color: red;
     background-color: white;
-  }
-
-  & .login-main__form {
-    max-width: 600px;
-    padding: 1rem;
-    border: #ccc 1px dotted;
-    margin: 0.7rem auto;
-
-    & .login-main__header {
-      max-width: 285px;
-    }
-
-    & .alert {
-      color: white;
-      background-color: red;
-      font-size: 15px;
-    }
-
-    & .login-main__control {
-      margin: 0.7rem auto;
-      &.invalid {
-        input {
-          border-color: red;
-        }
-      }
-    }
-
-    input[type='text'],
-    input[type='password'] {
-      display: block;
-      width: 100%;
-      padding: 0.4rem 0 0.4rem 0;
-      font-size: 1.2rem;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
   }
 }

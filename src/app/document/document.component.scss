@@ -1,64 +1,23 @@
-#document-wrapper {
-  margin: 0 auto;
+@import "src/styles/params";
 
-  & .card {
-    max-width: 30rem;
-    margin: 20px auto;
 
-    & .approve {
-      text-align: center;
-    }
-
-    & .card-title {
-      font-size: 20px;
-      font-weight: 500;
-    }
-  }
+.card {
+  max-width: $width;
+  border: 1px solid #999;
+  border-radius: 5px;
 }
 
-#form-edit__wrapper {
-  max-width: 30rem;
-  padding: 10px;
-  margin: 20px auto;
+.form-edit-wrapper {
+  max-width: $width;
 
-  & .card-title {
-    font-size: 20px;
-    font-weight: 500;
+  & .form-color {
+    color: red;
   }
 
-  & .form-group{
-    display: flex;
-    flex-direction: column;
-
-    &.invalid {
-      input, select {
-        border-color: red;
-        border-width: 1px;
-      }
+  .invalid {
+    input, select {
+      border-color: red;
+      border-width: 1px;
     }
-  }
-
-  & .form-buttons {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-around;
-
-    &>button {
-      margin-right: 2%;
-    }
-  }
-}
-
-.btn-exit {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-}
-
-@media screen and (max-width: 500px) {
-  #document-wrapper {
-    overflow: hidden;
-    padding: 5px;
   }
 }
