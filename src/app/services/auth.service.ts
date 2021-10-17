@@ -10,7 +10,7 @@ export class AuthService {
 
   isAuthenticated: boolean;
 
-  private registeredUser: IUser = {
+  private readonly registeredUser: IUser = {
     name: 'ivanov',
     password: 'ivanov123'
   };
