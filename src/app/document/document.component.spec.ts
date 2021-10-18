@@ -130,6 +130,11 @@ describe('DocumentComponent', () => {
     expect(component.exit).toHaveBeenCalledTimes(1);
   });
 
+  it('documentForm should contain resolution and comment controls', () => {
+    expect(component.documentForm.contains('resolution')).toBeTrue();
+    expect(component.documentForm.contains('comment')).toBeTrue();
+  });
+
   it('documentInfo should to be documentStub', () => {
     component.ngOnInit();
     expect(component.documentInfo).toEqual(documentStub);

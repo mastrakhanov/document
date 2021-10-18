@@ -85,6 +85,11 @@ describe('LoginPageComponent', () => {
     expect(component.submit).toHaveBeenCalledTimes(1);
   });
 
+  it('form should contain name and password controls', () => {
+    expect(component.form.contains('name')).toBeTrue();
+    expect(component.form.contains('password')).toBeTrue();
+  });
+
   it('should link to /document', (done) => {
     fixture.ngZone.run(() => {
       component.ngOnInit();
