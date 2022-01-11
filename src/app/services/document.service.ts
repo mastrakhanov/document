@@ -13,8 +13,8 @@ export class DocumentService {
       return {
         status: 200,
         title: data.title,
-        text1: data.text1,
-        text2: data.text2
+        text: data.text,
+        description: data.description
       };
     } else {
       throw new DocumentError(404, 'Нет данных');

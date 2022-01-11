@@ -7,8 +7,8 @@ export interface IDocument {
   id?: number;
   status?: number;
   title: string;
-  text1: string;
-  text2: string;
+  text: string;
+  description: string;
   error?: string;
 }
 

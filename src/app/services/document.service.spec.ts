@@ -24,8 +24,8 @@ describe('DocumentService', () => {
     const document = {
       status: 200,
       title: data.title,
-      text1: data.text1,
-      text2: data.text2
+      text: data.text,
+      description: data.description
     };
 
     expect(documentService.getDocument(1)).toEqual(document);

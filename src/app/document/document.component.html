@@ -9,8 +9,8 @@
          *ngIf="isVisible"
     >
       <h5>{{ documentInfo.title }}</h5>
-      <p>{{ documentInfo.text1 }}</p>
-      <p>{{ documentInfo.text2 }}</p>
+      <p>{{ documentInfo.text }}</p>
+      <p>{{ documentInfo.description }}</p>
       <div class="form-edit-wrapper p-3">
         <h5>Утверждение документа</h5>
         <form [formGroup]="documentForm" (ngSubmit)="approve()">

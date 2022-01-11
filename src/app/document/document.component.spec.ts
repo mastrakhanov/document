@@ -67,14 +67,14 @@ describe('DocumentComponent', () => {
     expect(element.textContent).toContain(documentStub.title);
   });
 
-  it('should contain documentStub text1', () => {
+  it('should contain documentStub text', () => {
     element = fixture.nativeElement.querySelector('p');
-    expect(element.textContent).toContain(documentStub.text1);
+    expect(element.textContent).toContain(documentStub.text);
   });
 
-  it('should contain documentStub text2', () => {
+  it('should contain documentStub description', () => {
     element = fixture.nativeElement.querySelectorAll('p')[1];
-    expect(element.textContent).toContain(documentStub.text2);
+    expect(element.textContent).toContain(documentStub.description);
   });
 
   it('should contain "Утверждение документа"', () => {
